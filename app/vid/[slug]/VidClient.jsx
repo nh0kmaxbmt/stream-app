@@ -17,11 +17,33 @@ export default async function VidClient({ video }) {
   const gvCodeDisplay = video.gv_codeslug
     ? video.gv_codeslug.toUpperCase() + "-" + video.gv_code.toUpperCase()
     : video.gv_code.toUpperCase();
-  const video_host = "streamtape";
-  const target = video.gv_content_info?.find(
-    (item) => item.host === video_host,
-  );
-  const vid_link = target?.url ?? "";
+
+  // const video_host = "streamtape";
+  // const target = video.gv_content_info?.find(
+  //   (item) => item.host === video_host,
+  // );
+  // const vid_link = target?.url ?? "";
+
+  const first_host = "doodstream";
+  const second_host = "streamtape";
+
+  // Try to find host 'b' first
+  let target = video.gv_content_info?.find((item) => item.host === first_host);
+  let vid_link;
+
+  if (target) {
+    // If 'b' found, use its url directly
+    vid_link = target.url;
+  } else {
+    // Else try to find 'a'
+    target = video.gv_content_info?.find((item) => item.host === second_host);
+    if (target) {
+      // Construct src for 'a'
+      vid_link = `https://${second_host}.com/e/${target.url}/${gvCodeDisplay}.mp4`;
+    } else {
+      vid_link = "";
+    }
+}
 
   const ep = 1;
   return (
@@ -44,7 +66,7 @@ export default async function VidClient({ video }) {
           <div className="grid place-items-center w-full h-full">
             {vid_link ? (
               <iframe
-                src={`https://${video_host}.com/e/${target.url}/${gvCodeDisplay}.mp4`}
+                src={vid_link}
                 // width="600"
                 // height="400"
                 className="w-[90%] h-[90%] rounded-lg"
