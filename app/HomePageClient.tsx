@@ -42,7 +42,7 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
           <div className="absolute bottom-12 left-8 max-w-2xl">
             <a href={first_movie.prop_slug} className="cursor-pointer">
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+              <h1 className="text-sm font-extrabold tracking-tight">
                 <span
                   className={`rounded
                 ${first_movie.is_hd ? "bg-red-600 text-white" : "bg-gray-700 text-gray-200"}
@@ -50,6 +50,9 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
                 >
                   {first_movie.is_hd ? "HD" : "SD"}
                 </span>
+                {"["}
+                {first_movie.gv_code}
+                {"]"}
                 {first_movie.prop_title}
               </h1>
             </a>
@@ -117,10 +120,13 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
 
                       <div className="mt-2">
                         <div className="flex items-center justify-between text-sm">
-                          <div className="font-medium">
-                            {movie.prop_title?.length > 100
-                              ? movie.prop_title.slice(0, 100) + "..."
-                              : movie.prop_title}
+                          <div className="text-sm">
+                              <span className="font-semibold text-base text-red-300">
+                                [{movie.gv_code}]{' '}
+                              </span>
+                              {movie.prop_title?.length > 100
+                                ? movie.prop_title.slice(0, 100) + "..."
+                                : movie.prop_title}
                           </div>
                           {movie.rating && (
                             <div className="text-xs text-gray-400">
@@ -150,5 +156,5 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
         <div className="h-24" />
       </main>
     </div>
-  )
+  );
 }
