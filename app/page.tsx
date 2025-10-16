@@ -1,6 +1,7 @@
 // import React, { useState } from "react";
 import { getLatestPost } from "@/utils/generalUtils";
 import HomePageClient from "@/app/HomePageClient";
+import { createSeoMetadata } from "@/utils/generalUtils";
 
 // Netflix-like streaming page for Next.js (page.tsx)
 // Tailwind CSS assumed to be configured in the project.
@@ -14,6 +15,13 @@ type Movie = {
   rating?: string;
   image: string;
 };
+
+export const metadata = createSeoMetadata({
+  description:
+    "Discover, browse, and search the largest collection of Japan gay video releases — EXFEED, BOYSLAB, GB-STORE, MEGA HUNK CHANNEL, KO-TUBE, DAIICHISOUKO, BOYSTUDIO(ボーイスタジオ), Men's Rush.TV, BULKYCH(バルキーチャンネル), STR8 BOYS(公式動画配信サイト), FUTURE BOY, TRANCE-VIDEO, CK-DOWNLOAD, FC2, KO-SHOP, ACCEED, etc.",
+  url: "/",
+  robots: "index,follow",
+});
 
 // const sampleRows: { title: string; movies: Movie[] }[] = [
 //   // {
