@@ -253,14 +253,28 @@ export const RelatedPost: React.FC<RelatedPostProps> = ({ post, layout }) => {
           </div>
           {/* The span is outside the image container but still in the same parent.
               Using peer-hover:hidden makes it hide when the peer (the image container) is hovered. */}
-          <span className="mt-2 text-center whitespace-normal break-all text-sm grid bg-zinc-900">
-            {post.gv_code && (
-              <span className="font-semibold text-base text-red-300">
-                [{post.gv_code}]
-              </span>
-            )}
-            {post.prop_title}
-          </span>
+          <div>
+            <div className="text-xs text-gray-400">
+              {post.year && post.duration
+                ? `${post.year} • ${post.duration} min`
+                : post.year
+                  ? post.year
+                  : post.duration
+                    ? `${post.duration} min`
+                    : null}
+            </div>
+            <span className="mt-2 whitespace-normal break-all text-sm grid bg-zinc-900">
+              {post.gv_code && (
+                <span className="font-semibold text-center text-base text-red-300">
+                  [{post.gv_code}]
+                </span>
+              )}
+              {/*{post.prop_title}*/}
+              {post.prop_title?.length > 50
+                ? post.prop_title.slice(0, 50) + "..."
+                : post.prop_title}
+            </span>
+          </div>
         </div>
       </a>
     </li>
@@ -496,7 +510,10 @@ interface ReportButtonProps {
   message: string;
 }
 
-export const ReportButton: React.FC<ReportButtonProps> = ({ videoId, message }) => {
+export const ReportButton: React.FC<ReportButtonProps> = ({
+  videoId,
+  message,
+}) => {
   const [status, setStatus] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean | null>(null);
 
@@ -507,13 +524,13 @@ export const ReportButton: React.FC<ReportButtonProps> = ({ videoId, message }) 
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "post_id": videoId, "body":message }),
+        body: JSON.stringify({ post_id: videoId, body: message }),
       });
 
       const data = await res.json();
       if (res.ok) {
         setStatus("Thanks! We've received your report.");
-        setIsOpen(true)
+        setIsOpen(true);
       } else {
         setStatus(data.message || "Something went wrong.");
       }
@@ -524,7 +541,7 @@ export const ReportButton: React.FC<ReportButtonProps> = ({ videoId, message }) 
   };
 
   return (
-    <div className="py-3">
+    <div className="py-3 grid place-items-center">
       <button
         onClick={handleReport}
         disabled={!!status} // disable if status exists
@@ -535,26 +552,27 @@ export const ReportButton: React.FC<ReportButtonProps> = ({ videoId, message }) 
           shadow-md ${status ? "" : "hover:shadow-lg"}
           transition duration-200 ease-in-out
           focus:outline-none focus:ring-2 ${status ? "" : "focus:ring-red-400"} focus:ring-offset-2
-        `}      >
-        {status ? "Reported": "Not playing?"}
+        `}
+      >
+        {status ? "Reported" : "Not playing?"}
       </button>
-        {/* Success Popup Modal */}
-        {isOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-              <h2 className="text-xl font-bold mb-4">Report Sent!</h2>
-              <p className="text-gray-300 mb-4">
-                We have received your report for this video.
-              </p>
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
-                onClick={() => setIsOpen(false)}
-              >
-                OK
-              </button>
-            </div>
+      {/* Success Popup Modal */}
+      {isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-xl font-bold mb-4">Report Sent!</h2>
+            <p className="text-gray-300 mb-4">
+              We have received your report for this video.
+            </p>
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
+              onClick={() => setIsOpen(false)}
+            >
+              OK
+            </button>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

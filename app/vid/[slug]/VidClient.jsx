@@ -43,7 +43,7 @@ export default async function VidClient({ video }) {
     } else {
       vid_link = "";
     }
-}
+  }
 
   const ep = 1;
   return (
@@ -81,16 +81,19 @@ export default async function VidClient({ video }) {
             )}
           </div>
         </div>
-          <ReportButton videoId={video.gv_id} message={"Something is wrong for this video"}/>
+        <ReportButton
+          videoId={video.gv_id}
+          message={"Something is wrong for this video"}
+        />
       </section>
 
       <div className="px-4">
         <div className="bg-zinc-900 rounded-t-lg"></div>
-        <h1 className="text-2xl font-bold px-2 py-5 uppercase">
-          {video.gv_name}
+        <h1 className="text-lg md:text-2xl font-bold px-2 py-5 uppercase">
+          {video.title}
         </h1>
-        <div className="grid grid-cols-12 p-1">
-          <div className="col-span-7 place-items-center grid">
+        <div className="grid md:grid-cols-12 p-1">
+          <div className="md:col-span-7 place-items-center grid">
             <ZoomableImage
               thumbnailSrc={video.gv_cover_image}
               // thumbnailSrc={
@@ -104,34 +107,34 @@ export default async function VidClient({ video }) {
             />
           </div>
 
-          <dl className="col-span-5 pl-2 pt-2 text-sm">
-            <dt className="text-xl font-semibold text-red-300">CODE</dt>
+          <dl className="md:col-span-5 pl-2 pt-2 text-sm">
+            {video.title_trans && (
+              <>
+                <dt className="text-xl text-red-300 font-semibold">
+                  ENGLISH TITLE
+                </dt>
+                <dd>{video.title_trans}</dd>
+              </>
+            )}
+
+            <dt className="text-xl font-semibold text-red-300 pt-2">CODE</dt>
             <dd>{video.gv_code}</dd>
 
-            {video.gv_runtime > 0 && (
+            {video.duration > 0 && (
               <>
                 <dt className="text-xl text-red-300 font-semibold pt-2">
                   RUNTIME
                 </dt>
-                <dd>{String(video.gv_runtime).padStart(2, "0")} minutes</dd>
+                <dd>{String(video.duration).padStart(2, "0")} minutes</dd>
               </>
             )}
 
-            {video.gv_trans && (
-              <>
-                <dt className="text-xl text-red-300 font-semibold pt-2">
-                  ENGLISH NAME
-                </dt>
-                <dd>{video.gv_trans}</dd>
-              </>
-            )}
-
-            {video.gv_date && (
+            {video.release_date && (
               <>
                 <dt className="text-xl text-red-300 font-semibold pt-2">
                   RELEASE DATE
                 </dt>
-                <dd>{video.gv_date}</dd>
+                <dd>{video.release_date}</dd>
               </>
             )}
 
@@ -157,15 +160,6 @@ export default async function VidClient({ video }) {
                 </dd>
               </>
             )}
-            {/*Description content*/}
-            {video.gv_description && (
-              <>
-                <dt className="text-xl text-red-300 font-semibold pt-2">
-                  DESCRIPTION
-                </dt>
-                <dd>{video.gv_description}</dd>
-              </>
-            )}
           </dl>
         </div>
         {/* Ads: Native Banner */}
@@ -185,6 +179,15 @@ export default async function VidClient({ video }) {
         </section>
 */}{" "}
       </div>
+      {/*Description content*/}
+      {video.gv_description && (
+        <>
+          <dt className="text-xl text-red-300 font-semibold pt-2">
+            DESCRIPTION
+          </dt>
+          <dd>{video.gv_description}</dd>
+        </>
+      )}
       <h2 className="text-2xl font-bold px-2 py-5 text-red-300">
         {"Recommended for you"}
       </h2>

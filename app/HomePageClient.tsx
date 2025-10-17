@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Search, User, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Post } from "@/components/FeatureList";
+import { Post, RelatedPosts } from "@/components/FeatureList";
 
 interface HomePageClientProps {
   // prettier-ignore
@@ -42,7 +42,7 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
           <div className="absolute bottom-12 left-8 max-w-2xl">
             <a href={first_movie.prop_slug} className="cursor-pointer">
-              <h1 className="text-sm font-extrabold tracking-tight">
+              <h1 className="text-sm md:text-3xl font-extrabold tracking-tight">
                 <span
                   className={`rounded
                 ${first_movie.is_hd ? "bg-red-600 text-white" : "bg-gray-700 text-gray-200"}
@@ -87,67 +87,7 @@ export default function HomePageClient({ latestPost }: HomePageClientProps) {
               <h2 className="text-lg md:text-2xl font-semibold mb-3">
                 {row.title}
               </h2>
-              <div className="relative col-span-6">
-                <div className="grid gap-6 mt-3 grid-cols-3 md:grid-cols-4 gap-3 overflow-x-auto scrollbar-hide py-2">
-                  {row.movies.map((movie) => (
-                    <a
-                      key={movie.gv_id}
-                      href={movie.prop_slug}
-                      className="cursor-pointer"
-                    >
-                      <div className="relative rounded overflow-hidden">
-                        <img
-                          src={movie.gv_cover_image}
-                          alt={movie.prop_title}
-                          className="w-full h-36 md:h-48 object-cover"
-                        />
-                        <div
-                          className={`absolute inset-0 bg-black/30 transition-opacity pointer-events-none ${hoveredMovie === movie.gv_id ? "opacity-0" : "opacity-0"}`}
-                        />
-                        {/* HD/SD badge */}
-                        <div
-                          className={`
-                          absolute bottom-1 left-1
-                          text-[10px] md:text-xs font-semibold
-                          px-2 py-0.5 rounded
-                          ${movie.is_hd ? "bg-red-600 text-white" : "bg-gray-700 text-gray-200"}
-                          backdrop-blur-sm bg-opacity-80
-                        `}
-                        >
-                          {movie.is_hd ? "HD" : "SD"}
-                        </div>
-                      </div>
-
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="text-sm">
-                              <span className="font-semibold text-base text-red-300">
-                                [{movie.gv_code}]{' '}
-                              </span>
-                              {movie.prop_title?.length > 100
-                                ? movie.prop_title.slice(0, 100) + "..."
-                                : movie.prop_title}
-                          </div>
-                          {movie.rating && (
-                            <div className="text-xs text-gray-400">
-                              {movie.rating}
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          {movie.year && movie.duration
-                            ? `${movie.year} • ${movie.duration} min`
-                            : movie.year
-                              ? movie.year
-                              : movie.duration
-                                ? `${movie.duration} min`
-                                : null}
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
+                  {row.movies.length > 0 && <RelatedPosts posts={row.movies} />}
             </div>
           ))}
         </section>
